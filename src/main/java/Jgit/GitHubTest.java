@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class GitHubTest {
-   final static String login = "lxm0";
-   final static String passwd = "18260031081@163.com";
+   final static String login = "";
+   final static String passwd = "";
 
 
 
