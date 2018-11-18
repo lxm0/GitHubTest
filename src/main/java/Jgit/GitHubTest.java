@@ -16,11 +16,11 @@ public class GitHubTest {
     public static void main(String[] args){
 
         //获取GitHub的commit
-        getGitHubCommit();
+       //getGitHubCommit();
         //获取仓库分支
         // getGitHubBranches();
         //获取GitHubGitHubPullRequestInfo
-        //getGitHubPullRequestInfo();
+        getGitHubPullRequestInfo();
         //获取GitHub提交信息
         // getGitHubCommitInfo();
         //获取commit文件
@@ -49,7 +49,7 @@ public class GitHubTest {
             GitHub github = GitHub.connectUsingPassword(login,passwd);
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-            GHRepository ghRepository = github.getRepository("kohsuke/github-api");
+            GHRepository ghRepository = github.getRepository("python/cpython");
             ghRepository.listCommits();
             int count= 0;
 
@@ -84,36 +84,38 @@ public class GitHubTest {
     public static void getGitHubPullRequestInfo(){
         try{
             GitHub github = GitHub.connectUsingPassword(login,passwd);
-            GHRepository ghRepository = github.getRepository("kohsuke/github-api");
+            GHRepository ghRepository = github.getRepository("python/cpython");
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             GHPullRequestQueryBuilder pullRequestQueryBuilder = ghRepository.queryPullRequests();
             PagedIterable<GHPullRequest> ghPullRequests =  pullRequestQueryBuilder.list();
-            //System.out.println(github.getUser(login).getId());
             int count  = 0;
             for(GHPullRequest ghPullRequest:ghPullRequests){
                 count++;
                 ghPullRequest.getComments();
-//                System.out.println("************* "+count+" *************");
-//                System.out.println("创建时间 "+format.format(ghPullRequest.getCreatedAt()));
-//                System.out.println("标题:  "+ ghPullRequest.getTitle());
-//                System.out.println("作者:  "+ ghPullRequest.getUser().getName());
-//                System.out.println("状态:  "+ ghPullRequest.getState());
-//                System.out.println("提交数量:  "+ ghPullRequest.getCommits());
-//                System.out.println("HtmlUrl:  "+ ghPullRequest.getHtmlUrl());
+                System.out.println("************* "+count+" *************");
+                System.out.println("创建时间 "+format.format(ghPullRequest.getCreatedAt()));
+                System.out.println("标题:  "+ ghPullRequest.getTitle());
+                System.out.println("作者:  "+ ghPullRequest.getUser().getName());
+                System.out.println("状态:  "+ ghPullRequest.getState());
+                System.out.println("提交数量:  "+ ghPullRequest.getCommits());
+                System.out.println("提交数量:  "+ ghPullRequest.listFiles());
+                System.out.println("HtmlUrl:  "+ ghPullRequest.getHtmlUrl());
 
-//                System.out.println("评论数量:  "+ ghPullRequest.getCommentsCount());
-//                System.out.println("审查数量:  "+ ghPullRequest.getReviewComments());
-
+                System.out.println("评论数量:  "+ ghPullRequest.getCommentsCount());
+                System.out.println("审查数量:  "+ ghPullRequest.getReviewComments());
+                for(GHPullRequestFileDetail ghPullRequestFileDetail :ghPullRequest.listFiles()){
+                    System.out.println("Patch： "+ghPullRequestFileDetail.getPatch());
+                }
 //                for(GHIssueComment comment:ghPullRequest.getComments()){
 //                    System.out.println("评论者姓名： "+comment.getUser().getName());
 //                    System.out.println("评论内容： "+comment.getBody());
 //                }
-                for(GHPullRequestReviewComment comment:ghPullRequest.listReviewComments()){
-                    System.out.println("审查者姓名： "+comment.getUser().getName());
-                    System.out.println("审查者id： "+comment.getUser().getId());
-                    System.out.println("审查内容： "+comment.getBody());
-                    System.out.println("审查评论ID： "+comment.getId());
-                }
+//                for(GHPullRequestReviewComment comment:ghPullRequest.listReviewComments()){
+//                    System.out.println("审查者姓名： "+comment.getUser().getName());
+//                    System.out.println("审查者id： "+comment.getUser().getId());
+//                    System.out.println("审查内容： "+comment.getBody());
+//                    System.out.println("审查评论ID： "+comment.getId());
+//                }
 
 
             }
@@ -150,9 +152,9 @@ public class GitHubTest {
     public static void getGitHubCommitFiles(){
         try{
             GitHub github = GitHub.connectUsingPassword(login,passwd);
-            GHRepository ghRepository = github.getRepository("kohsuke/github-api");
+            GHRepository ghRepository = github.getRepository("python/cpython");
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            GHCommit commit =  ghRepository.getCommit("c8b0584127303533f9918cacdcb6eafb72e6c270");
+            GHCommit commit =  ghRepository.getCommit("689d555ec135d4115574addd063c358ac4897cc4");
             System.out.println("提交时间： "+format.format(commit.getCommitDate()));
             System.out.println("提交作者： "+commit.getAuthor().getName());
             commit.getTree().getTree();
@@ -219,4 +221,6 @@ public class GitHubTest {
             System.out.println(e.getMessage());
         }
     }
+
+
 }
